@@ -1,0 +1,408 @@
+/* Gebruikers Page - Matches Figma Design */
+
+@import url('style.css');
+
+:root {
+    --primary-blue: #6366F1;
+    --background-light: #F9FAFB;
+    --surface-white: #FFFFFF;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --border-color: #E5E7EB;
+    --red-delete: #EF4444;
+    --gray-light: #F3F4F6;
+    
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+    background-color: var(--background-light);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 260px;
+    background-color: var(--md-sys-color-surface);
+    border-right: 1px solid var(--md-sys-color-outline-variant);
+    display: flex;
+    flex-direction: column;
+    padding: var(--spacing-md);
+    overflow-y: auto;
+}
+
+.sidebar-header {
+    padding: var(--spacing-md) 0;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.sidebar-header .logo-container {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sidebar-header .logo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.sidebar-header h2 {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--md-sys-color-on-surface);
+    margin: 0;
+}
+
+.btn-create {
+    width: 100%;
+    background-color: var(--md-sys-color-primary);
+    color: var(--md-sys-color-on-primary);
+    border: none;
+    padding: 12px var(--spacing-md);
+    border-radius: 28px;
+    font-size: var(--md-sys-typescale-label-large);
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    transition: all 0.2s ease;
+    box-shadow: var(--md-sys-elevation-1);
+    margin-bottom: var(--spacing-lg);
+    text-decoration: none;
+}
+
+.btn-create:hover {
+    box-shadow: var(--md-sys-elevation-2);
+    background-color: #4A7FDB;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-lg);
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    padding: 12px var(--spacing-md);
+    border-radius: var(--radius-xl);
+    color: var(--md-sys-color-on-surface-variant);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    font-size: var(--md-sys-typescale-body-large);
+}
+
+.nav-item:hover {
+    background-color: var(--md-sys-color-surface-variant);
+    color: var(--md-sys-color-on-surface);
+}
+
+.nav-item.active {
+    background-color: var(--md-sys-color-secondary-container);
+    color: var(--md-sys-color-on-surface);
+}
+
+.nav-item .material-icons {
+    font-size: 24px;
+}
+
+/* Main Content */
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Admin-only visibility */
+.admin-only {
+    display: none;
+}
+
+body.is-admin .admin-only {
+    display: flex;
+}
+
+/* Page Header */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    background-color: var(--md-sys-color-surface);
+    gap: var(--spacing-md);
+}
+
+.page-header h1 {
+    font-size: var(--md-sys-typescale-headline-large);
+    font-weight: 400;
+    color: var(--md-sys-color-on-surface);
+    margin: 0;
+}
+
+.header-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    align-items: center;
+}
+
+.btn-user-avatar {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-full);
+    color: var(--md-sys-color-on-surface-variant);
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-user-avatar:hover {
+    background-color: var(--md-sys-color-surface-variant);
+}
+
+/* Users Container */
+.users-container {
+    flex: 1;
+    overflow-y: auto;
+    padding: var(--spacing-xl);
+    background-color: var(--background-light);
+}
+
+/* Users Grid - Matches Figma (4 columns) */
+.users-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* User Card - Matches Figma Design */
+.user-card {
+    background-color: var(--gray-light);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.user-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* User Icon - Matches Figma */
+.user-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 80px !important;
+    color: #9CA3AF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* User Name - Matches Figma */
+.user-name {
+    font-size: var(--font-size-base);
+    font-weight: 500;
+    color: var(--text-primary);
+    margin: var(--spacing-sm) 0;
+    text-align: center;
+}
+
+/* Role Form - Full Width */
+.role-form {
+    width: 100%;
+}
+
+/* User Role Select - Matches Figma */
+.user-role-select {
+    width: 100%;
+    padding: 10px var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    background-color: var(--surface-white);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.user-role-select:hover {
+    border-color: var(--text-secondary);
+}
+
+.user-role-select:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Delete Form - Full Width */
+.delete-form {
+    width: 100%;
+}
+
+/* Delete User Button - Matches Figma (Red rounded button at bottom) */
+.btn-delete-user {
+    width: 100%;
+    padding: 10px;
+    background-color: var(--red-delete);
+    color: white;
+    border: none;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    transition: all 0.2s;
+    margin-top: var(--spacing-sm);
+}
+
+.btn-delete-user:hover:not(:disabled) {
+    background-color: #DC2626;
+    transform: scale(1.02);
+}
+
+.btn-delete-user:disabled {
+    background-color: #D1D5DB;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.btn-delete-user .material-icons {
+    font-size: 18px;
+}
+
+/* No Users State */
+.no-users {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--text-secondary);
+}
+
+/* Admin Only Elements */
+.admin-only {
+    display: none !important;
+}
+
+body.is-admin .admin-only {
+    display: flex !important;
+}
+
+/* View Profile Button */
+.btn-view-profile {
+    width: 100%;
+    padding: 8px 16px;
+    background-color: blue;
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+    font-size: var(--md-sys-typescale-body-medium);
+    font-weight: 500;
+    transition: all 0.2s;
+    text-decoration: none;
+    margin: var(--spacing-sm) 0;
+}
+
+.btn-view-profile:hover {
+    background-color: var(--primary-blue-hover);
+    transform: scale(1.02);
+}
+
+.btn-view-profile .material-icons {
+    font-size: 18px;
+}
+
+/* Responsive - Matches Figma mobile view */
+@media (max-width: 1200px) {
+    .users-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 900px) {
+    .users-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .users-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .users-container {
+        padding: var(--spacing-md);
+    }
+}
+
+
+body.is-admin .admin-only {
+    display: block;
+}
+
+body.is-admin .btn-create.admin-only {
+    display: flex;
+}
+
+body.is-admin .nav-item.admin-only {
+    display: flex;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .users-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: var(--spacing-md);
+    }
+
+    .user-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 60px;
+    }
+}
