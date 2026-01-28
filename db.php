@@ -69,10 +69,15 @@ function registerUser($pdo, $username, $email, $password) {
     }
 }
 
+/**
+ * GEFIXTE sendVerificationEmail functie - POORT 465 SSL
+ * 
+ * KOPIEER DEZE FUNCTIE naar je db.php en VERVANG de oude versie
+ */
+
 function sendVerificationEmail($email, $username, $code) {
-    $config = require 'email_config.php';
+    $config = require __DIR__ . '/email_config.php';
     
-    // Als SMTP uitgeschakeld is, toon code op scherm
     if (!$config['use_smtp']) {
         return ['sent' => false, 'code' => $code];
     }
@@ -80,17 +85,24 @@ function sendVerificationEmail($email, $username, $code) {
     $mail = new PHPMailer(true);
     
     try {
-        // SMTP configuratie
         $mail->isSMTP();
-        $mail->SMTPAuth = true;
         $mail->Host = $config['smtp_host'];
+        $mail->Port = $config['smtp_port'];
+        $mail->SMTPAuth = true;
         $mail->Username = $config['smtp_username'];
         $mail->Password = $config['smtp_password'];
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-        $mail->Port = $config['smtp_port'];
-        $mail->CharSet = 'UTF-8';
         
-        // E-mail van jouw adres naar gebruiker
+        // Kies SSL of TLS op basis van poort
+        if ($config['smtp_port'] == 465) {
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;  // SSL
+        } else {
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;  // TLS
+        }
+        
+        $mail->CharSet = 'UTF-8';
+        $mail->Timeout = 10;
+        $mail->SMTPKeepAlive = false;
+        
         $mail->setFrom($config['from_email'], $config['from_name']);
         $mail->addAddress($email, $username);
         $mail->isHTML(true);
@@ -98,39 +110,26 @@ function sendVerificationEmail($email, $username, $code) {
         
         $mail->Body = "
         <html>
-        <head>
-            <style>
-                body { font-family: Arial, sans-serif; background: #f5f5f5; }
-                .container { max-width: 600px; margin: 0 auto; padding: 30px; background: white; border-radius: 10px; }
-                .code-box { background: #f0f0f0; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0; }
-                .code { font-size: 36px; font-weight: bold; letter-spacing: 8px; color: #4CAF50; }
-                .footer { margin-top: 20px; padding-top: 20px; border-top: 1px solid #ddd; color: #666; font-size: 12px; }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
+        <body style='font-family:Arial;'>
+            <div style='max-width:500px;margin:0 auto;padding:30px;background:white;border-radius:10px;'>
                 <h2>🎉 Welkom bij De Gouden Schoen, $username!</h2>
-                <p>Bedankt voor het aanmaken van een account. Gebruik de onderstaande code om je account te verifiëren:</p>
-                <div class='code-box'>
-                    <div class='code'>$code</div>
+                <p>Gebruik deze code om je account te verifiëren:</p>
+                <div style='background:#f0f0f0;padding:20px;text-align:center;border-radius:8px;margin:20px 0;'>
+                    <span style='font-size:36px;font-weight:bold;letter-spacing:8px;color:#4CAF50;'>$code</span>
                 </div>
-                <p style='color: #666; font-size: 14px;'>Deze code is 15 minuten geldig.</p>
-                <div class='footer'>
-                    <p>Als je dit account niet hebt aangemaakt, kun je deze e-mail negeren.</p>
-                </div>
+                <p style='color:#666;font-size:14px;'>Deze code is 15 minuten geldig.</p>
             </div>
         </body>
-        </html>
-        ";
+        </html>";
         
         $mail->send();
         return ['sent' => true, 'code' => $code];
         
     } catch (Exception $e) {
+        error_log("Email error: " . $mail->ErrorInfo);
         return ['sent' => false, 'code' => $code, 'error' => $mail->ErrorInfo];
     }
 }
-
 function getUserById($user_id) {
     global $pdo;
     try {

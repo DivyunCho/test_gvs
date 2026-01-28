@@ -1,13 +1,29 @@
 <?php
-// E-mail configuratie
-// Voor Gmail SMTP (lokaal EN online)
+/**
+ * Email Configuratie - De Gouden Schoen
+ * Brevo SMTP - Poort 465 (SSL) - vaak betrouwbaarder dan 587
+ */
 
 return [
-    'smtp_host' => 'smtp.gmail.com',
-    'smtp_port' => 587,
-    'smtp_username' => 'Jibrailsaih2008@gmail.com',
-    'smtp_password' => 'lcvz tuib symr qwhq',
-    'from_email' => 'Jibrailsaih2008@gmail.com',
+    // SMTP AAN
+    'use_smtp' => true,
+    
+    // Brevo SMTP Server - POORT 465 MET SSL
+    'smtp_host' => 'smtp-relay.brevo.com',
+    'smtp_port' => 465,                    // ← GEWIJZIGD naar 465
+    'smtp_secure' => 'ssl',                // ← GEWIJZIGD naar SSL
+    
+    // Brevo Credentials
+    'smtp_username' => 'a0ed10001@smtp-brevo.com',
+    'smtp_password' => 'xsmtpsib-651451c613f015d84de8639158f86ca78af7adf19b0f16be80959238d2c02fd1-XInT4P03QFzgaSwo',
+    
+    // Afzender
+    'from_email' => 'cdivyun@gmail.com',
     'from_name' => 'De Gouden Schoen',
-    'use_smtp' => true
+    
+    // Timeout
+    'timeout' => 10,
+    
+    // Debug
+    'debug' => false
 ];
